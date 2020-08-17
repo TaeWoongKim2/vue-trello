@@ -10,3 +10,5 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+// App 는 root component 역할을 한다.
