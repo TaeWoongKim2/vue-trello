@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {board} from '../api'
 
 export default {
   name: 'HelloWorld',
@@ -83,17 +83,25 @@ export default {
     fetchData() {
       this.loading = true;
 
-      axios.get('http://localhost:3000/boards')
-        .then(res => {
-          this.boards = res.data;
-        })
-        .catch(() => {
-          // this.apiErr = res.response.data;
-          this.$router.replace('/login');
+      board.fetch()
+        .then(data => {
+          this.boards = data
         })
         .finally(() => {
           this.loading = false;
         });
+
+      // axios.get('http://localhost:3000/boards')
+      //   .then(res => {
+      //     this.boards = res.data;
+      //   })
+      //   .catch(() => {
+      //     // this.apiErr = res.response.data;
+      //     this.$router.replace('/login');
+      //   })
+      //   .finally(() => {
+      //     this.loading = false;
+      //   });
 
       // const req = new XMLHttpRequest();
       // req.open('GET', 'http://localhost:3000/health');
