@@ -38,7 +38,7 @@ export default {
       setTimeout(() => {
         this.bid = this.$route.params.bid;
         this.loading = false;
-      }, 1000);
+      }, 500);
     }
   },
 }

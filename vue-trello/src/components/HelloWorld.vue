@@ -7,6 +7,23 @@
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
 
+    <br>
+    <hr>
+    <br>
+
+    <div v-if="loading">Loading...</div>
+    <div v-else>
+      API Result: {{ boards }}
+      <div v-for="board in boards" :key="board.id">
+        {{ board }}
+      </div>
+      <div v-if="apiErr">
+        <pre>
+          {{ apiErr }}
+        </pre>
+      </div>
+    </div>
+
     <h3>Boards</h3>
     <ul>
       <li><router-link to="/b/1">Name#1</router-link></li>
@@ -17,6 +34,7 @@
     <br>
     <hr>
     <br>
+
     <h3>Installed CLI Plugins</h3>
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
@@ -44,10 +62,51 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      loading: false,
+      boards: [],
+      apiErr: ''
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.loading = true;
+
+      axios.get('http://localhost:3000/boards')
+        .then(res => {
+          this.boards = res.data;
+        })
+        .catch(() => {
+          // this.apiErr = res.response.data;
+          this.$router.replace('/login');
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+
+      // const req = new XMLHttpRequest();
+      // req.open('GET', 'http://localhost:3000/health');
+      // req.send();
+      // req.addEventListener('load', () => {
+      //   this.loading = false;
+      //   this.apiRes = {
+      //     status: req.status,
+      //     statusText: req.statusText,
+      //     response: JSON.parse(req.response)
+      //   }
+      // });
+    }
   }
 }
 </script>
