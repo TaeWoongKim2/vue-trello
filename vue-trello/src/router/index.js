@@ -10,11 +10,17 @@ import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter) // 미들웨어
 
-  const routes = [
+const requireAuth = () => (to, from, next) => {
+  const isAuth = localStorage.getItem('token');
+  isAuth ? next() : next(`/login?rPath=${encodeURIComponent(to.path)}`);
+}
+
+const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    beforeEnter: requireAuth()
   },
   {
     path: '/login',
