@@ -1,83 +1,60 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
+  <div>
+    <div class="home-title">Personal Boards</div>
+    <div class="board-list" ref="boardList">
 
-    <br>
-    <hr>
-    <br>
+      <div 
+        class="board-item" 
+        v-for="b in boards" 
+        :key="b.id" 
+        :data-bgcolor="b.bgColor" 
+        ref="boardItem"
+      >
+        <router-link :to="`/b/${b.id}`">
+          <div class="board-item-title">{{ b.title }}</div>
+        </router-link>
+      </div>
 
-    <div v-if="loading">Loading...</div>
-    <div v-else>
-      API Result: {{ boards }}
-      <div v-for="board in boards" :key="board.id">
-        {{ board }}
+      <div class="board-item board-item-new">
+        <a class="new-board-btn" href="" @click.prevent="addBoard">
+          Create new board...
+        </a>
       </div>
-      <div v-if="apiErr">
-        <pre>
-          {{ apiErr }}
-        </pre>
-      </div>
+
+      <AddBoard v-if="isAddBoard" @close="isAddBoard = false" @submit="onAddBoard" />
+
     </div>
-
-    <h3>Boards</h3>
-    <ul>
-      <li><router-link to="/b/1">Name#1</router-link></li>
-      <li><router-link to="/b/2">Name#2</router-link></li>
-      <li><router-link to="/b/3">Name#3</router-link></li>
-    </ul>
-
-    <br>
-    <hr>
-    <br>
-
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
   </div>
 </template>
 
 <script>
 import {board} from '../api'
+import AddBoard from '@/components/modal/AddBoard'
 
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   },
+  components: {
+    AddBoard
+  },
   data() {
     return {
       loading: false,
       boards: [],
-      apiErr: ''
+      isAddBoard: false
     }
   },
   created() {
     this.fetchData()
+  },
+  updated() {
+    // created() 가 실행될 때, data()의 변경이 있을 떄 실행된다.
+    this.$refs.boardItem.forEach(el => {
+      el.style.backgroundColor = el.dataset.bgcolor;
+    })
+
   },
   methods: {
     fetchData() {
@@ -85,7 +62,8 @@ export default {
 
       board.fetch()
         .then(data => {
-          this.boards = data
+          console.log(data);
+          this.boards = data.list;
         })
         .finally(() => {
           this.loading = false;
@@ -114,6 +92,15 @@ export default {
       //     response: JSON.parse(req.response)
       //   }
       // });
+    },
+    addBoard() {
+      // console.log('addBoard()');
+      this.isAddBoard = true;
+    },
+    onAddBoard(title) {
+      // API
+      board.create(title)
+        .then(() => this.fetchData());
     }
   }
 }
@@ -121,18 +108,47 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.home-title {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.board-list {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+.board-item {
+  width: 23%;
+  height: 100px;
+  margin: 0 2% 20px 0;
+  border-radius: 3px;
 }
-a {
-  color: #42b983;
+.board-item-new {
+  background-color: #ddd;
+}
+.board-item a {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.board-item a:hover,
+.board-item a:focus {
+  background-color: rgba(0,0,0, .1);
+  color: #666;
+}
+.board-item-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 10px;
+}
+.board-item a.new-board-btn {
+  font-weight: 700;
+  color: #888;
 }
 </style>
