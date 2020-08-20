@@ -3,8 +3,8 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       
-      <a href="" v-if="isAuth" @click.prevent="logout">Logout |</a>
-      <router-link to="/login" v-else>Login |</router-link>
+      <a href="" v-if="isAuth" @click.prevent="logout">Logout</a>
+      <router-link to="/login" v-else>Login</router-link>  |
       
       <router-link to="/about">About</router-link>
     </div>
