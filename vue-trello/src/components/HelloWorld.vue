@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import {board} from '../api'
 import AddBoard from '@/components/modal/AddBoard'
 
@@ -43,8 +44,14 @@ export default {
     return {
       loading: false,
       boards: [],
-      isAddBoard: false
     }
+  },
+  computed: {
+    // ES6의 해체 문법 !!!
+    ...mapState([
+      'isAddBoard'
+    ]),
+    // 다른 속성 추가 가능 !!!
   },
   created() {
     this.fetchData()
@@ -95,7 +102,8 @@ export default {
     },
     addBoard() {
       // console.log('addBoard()');
-      this.isAddBoard = true;
+      // this.isAddBoard = true;
+      
     },
     onAddBoard(title) {
       // API

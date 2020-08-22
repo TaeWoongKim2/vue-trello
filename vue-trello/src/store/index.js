@@ -5,11 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isAddBoard: false,
+    
   },
   mutations: {
+
   },
   actions: {
+
   },
   modules: {
+
   }
 })
