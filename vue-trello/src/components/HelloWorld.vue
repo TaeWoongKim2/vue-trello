@@ -16,7 +16,7 @@
       </div>
 
       <div class="board-item board-item-new">
-        <a class="new-board-btn" href="" @click.prevent="addBoard">
+        <a class="new-board-btn" href="" @click.prevent="SET_IS_ADD_BOARD(true)">
           Create new board...
         </a>
       </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import {board} from '../api'
 import AddBoard from '@/components/modal/AddBoard'
 
@@ -64,12 +64,20 @@ export default {
 
   },
   methods: {
+    ...mapMutations([
+      'SET_IS_ADD_BOARD'
+    ]),
+    // addBoard() {
+    //   // console.log('addBoard()');
+    //   // this.isAddBoard = true;
+    //   this.$store.commit('SET_IS_ADD_BOARD', true);
+    // },
     fetchData() {
       this.loading = true;
 
       board.fetch()
         .then(data => {
-          console.log(data);
+          // console.log(data);
           this.boards = data.list;
         })
         .finally(() => {
@@ -99,11 +107,6 @@ export default {
       //     response: JSON.parse(req.response)
       //   }
       // });
-    },
-    addBoard() {
-      // console.log('addBoard()');
-      // this.isAddBoard = true;
-      
     },
     onAddBoard(title) {
       // API
