@@ -108,10 +108,11 @@ export default {
       //   }
       // });
     },
-    onAddBoard(title) {
+    onAddBoard() {
       // API
-      board.create(title)
-        .then(() => this.fetchData());
+      this.fetchData();
+      // board.create(title)
+      //   .then(() => this.fetchData());
     }
   }
 }
