@@ -14,18 +14,26 @@
 </template>
 
 <script>
-import { setAuthInHeader } from './api';
+// import { setAuthInHeader } from './api';
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   computed: {
-    isAuth() {
-      return !!localStorage.getItem('token');
-    }
+    ...mapGetters([
+      'isAuth'
+    ])
+    // isAuth() {
+    //   return !!localStorage.getItem('token');
+    // }
   },
   methods: {
+    ...mapMutations([
+      'LOGOUT'
+    ]),
     logout() {
-      setAuthInHeader(null);
-      delete localStorage.token;
+      this.LOGOUT();
+      // setAuthInHeader(null);
+      // delete localStorage.token;
       this.$router.push('/login');
     }
   }

@@ -22,7 +22,8 @@
 </template>
 
 <script>
-import {authorizer, setAuthInHeader} from '../api'
+// import {authorizer, setAuthInHeader} from '../api'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -43,20 +44,31 @@ export default {
     this.returnPath = this.$route.query.rPath || '/'
   },
   methods: {
+    ...mapActions([
+      'LOGIN'
+    ]),
     onSubmit() {
       this.error = '';
       // console.log(this.email, this.password);
-      authorizer.login(this.email, this.password)
-        .then(data => {
-          // console.log(data);
-          localStorage.setItem('token', data.accessToken);
-          setAuthInHeader(data.accessToken);
+
+      this.LOGIN({email: this.email, password: this.password})
+        .then(() => {
           this.$router.push(this.returnPath);
         })
         .catch(err => {
-          // console.log(err.data.error);
           this.error = err.data.error;
         });
+      // authorizer.login(this.email, this.password)
+      //   .then(data => {
+      //     // console.log(data);
+      //     localStorage.setItem('token', data.accessToken);
+      //     setAuthInHeader(data.accessToken);
+      //     this.$router.push(this.returnPath);
+      //   })
+      //   .catch(err => {
+      //     // console.log(err.data.error);
+      //     this.error = err.data.error;
+      //   });
     }
   }
 } 

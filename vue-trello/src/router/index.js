@@ -7,11 +7,15 @@ import Board from '../views/feature/Board.vue'
 import Card from '../views/feature/Card.vue'
 import NotFound from '../views/NotFound.vue'
 
+// Vue 인스턴스가 없기 때문에 store에서 바로 가져와야 한다.
+import store from '../store'
+
 
 Vue.use(VueRouter) // 미들웨어
 
 const requireAuth = () => (to, from, next) => {
-  const isAuth = localStorage.getItem('token');
+  // const isAuth = localStorage.getItem('token');
+  const isAuth =  store.getters.isAuth;
   isAuth ? next() : next(`/login?rPath=${encodeURIComponent(to.path)}`);
 }
 

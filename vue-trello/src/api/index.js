@@ -28,8 +28,9 @@ export const setAuthInHeader = token => {
     axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null;
 }
 
-const {token} = localStorage;
-if(token) setAuthInHeader(token);
+// Vuex store.js로 기능 이동!
+// const {token} = localStorage;
+// if(token) setAuthInHeader(token);
 
 export const board = {
     fetch() {
