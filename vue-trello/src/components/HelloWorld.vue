@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="home-title">Personal Boards</div>
+    <div class="home-title">EHOTO's Boards created by Vue.js</div>
     <div class="board-list" ref="boardList">
 
       <div 
@@ -21,15 +21,15 @@
         </a>
       </div>
 
-      <AddBoard v-if="isAddBoard" @close="isAddBoard = false" @submit="onAddBoard" />
+      <AddBoard v-if="isAddBoard" />
 
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import {board} from '../api'
+import { mapState, mapMutations, mapActions } from 'vuex'
+// import {board} from '../api'
 import AddBoard from '@/components/modal/AddBoard'
 
 export default {
@@ -43,13 +43,15 @@ export default {
   data() {
     return {
       loading: false,
-      boards: [],
+      error: '',
+      // boards: [],
     }
   },
   computed: {
     // ES6의 해체 문법 !!!
     ...mapState([
-      'isAddBoard'
+      'isAddBoard',
+      'boards'
     ]),
     // 다른 속성 추가 가능 !!!
   },
@@ -67,6 +69,9 @@ export default {
     ...mapMutations([
       'SET_IS_ADD_BOARD'
     ]),
+    ...mapActions([
+      'FETCH_BOARDS'
+    ]),
     // addBoard() {
     //   // console.log('addBoard()');
     //   // this.isAddBoard = true;
@@ -74,15 +79,18 @@ export default {
     // },
     fetchData() {
       this.loading = true;
+      this.FETCH_BOARDS().finally(() => {
+        this.loading = false;
+      });
 
-      board.fetch()
-        .then(data => {
-          // console.log(data);
-          this.boards = data.list;
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      // board.fetch()
+      //   .then(data => {
+      //     // console.log(data);
+      //     this.boards = data.list;
+      //   })
+      //   .finally(() => {
+      //     this.loading = false;
+      //   });
 
       // axios.get('http://localhost:3000/boards')
       //   .then(res => {
@@ -131,7 +139,7 @@ export default {
   flex-wrap: wrap;
 }
 .board-item {
-  width: 23%;
+  width: 18%;
   height: 100px;
   margin: 0 2% 20px 0;
   border-radius: 3px;

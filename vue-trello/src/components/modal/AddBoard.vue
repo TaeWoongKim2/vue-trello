@@ -62,12 +62,16 @@ export default {
     //   this.$emit('close');
     // },
     ...mapActions([
-      'ADD_BOARD'
+      'ADD_BOARD',
+      'FETCH_BOARDS'
     ]),
     addBoard() {
-      this.$emit('submit');
       this.SET_IS_ADD_BOARD(false);
-      this.ADD_BOARD({title: this.input});
+      this.ADD_BOARD({title: this.input}).then(() => {
+        this.FETCH_BOARDS();
+      });
+      // this.$emit('submit');
+
       // this.$store.dispatch('ADD_BOARD', {title: this.input});
       // this.$emit('close');
       // this.$emit('submit', title);

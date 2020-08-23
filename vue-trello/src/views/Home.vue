@@ -16,3 +16,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.home img {
+    height: 36px;
+    position: absolute;
+    left: 24px;
+    top: 24px;
+}
+</style>
