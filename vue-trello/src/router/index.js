@@ -32,6 +32,7 @@ const routes = [
     path: '/b/:bid',
     name: 'Board',
     component: Board,
+    beforeEnter: requireAuth(),
     children: [
       // 중첩 라우팅!
       { path: 'c/:cid', component: Card }
