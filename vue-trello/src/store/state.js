@@ -1,4 +1,3 @@
-
 const state = {
   token: null,
   isAddBoard: false,
