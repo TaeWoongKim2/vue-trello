@@ -129,6 +129,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .home-title {
+  margin-bottom: 20px;
   padding: 10px;
   font-size: 18px;
   font-weight: bold;

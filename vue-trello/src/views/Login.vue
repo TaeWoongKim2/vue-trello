@@ -89,7 +89,7 @@ form button {
   margin-top: 10px;
 }
 form button.btn-success {
-  background-color: #3dc743;
+  background-color: #e4e4e4;
 }
 form .form-group {
   text-align: left;

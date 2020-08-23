@@ -18,6 +18,10 @@ export default {
 </script>
 
 <style scoped>
+.home {
+  margin: auto;
+  max-width: 998px;
+}
 .home img {
     height: 36px;
     position: absolute;
